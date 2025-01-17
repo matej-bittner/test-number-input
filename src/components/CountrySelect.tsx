@@ -1,18 +1,33 @@
 import * as React from "react";
 
-import { ListItemIcon, MenuItem, Select } from "@mui/material";
+import {
+  ListItemIcon,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import {
   Country,
   default as CountrySelectComponent,
   type Value,
 } from "react-phone-number-input";
+
 interface ISelectProps
   extends React.ComponentProps<typeof CountrySelectComponent> {
-  value?: Country;
+  value?: Value;
   options: {
     value?: Country;
     label: string;
   }[];
+  onChange: (newValue: Value) => void;
+  variant?: "filled" | "outlined" | "standard";
+  size?: "medium" | "small";
+  readOnly?: boolean;
+
+  onFocus?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  id?: string;
+  disabled?: boolean;
 }
 
 const CountrySelect = ({
@@ -20,18 +35,28 @@ const CountrySelect = ({
   onChange,
   iconComponent: Icon,
   value,
-  ...rest
+
+  variant,
+  id,
+  onBlur,
+  onFocus,
+  readOnly,
+  size,
+  ...props
 }: ISelectProps) => {
   return (
     <Select
-      {...rest}
+      // {...props}
       value={value}
       defaultValue={value}
-      size="small"
+      size={size}
+      readOnly={readOnly}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      id={id}
+      variant={variant}
       renderValue={(selected) => Icon({ country: selected })}
-      onChange={(event: React.ChangeEvent<{ value: Value }>) => {
-        // console.log("val", event.target.value);
-
+      onChange={(event: SelectChangeEvent<Value>) => {
         onChange!(event.target.value as Value);
       }}
       sx={{
@@ -67,9 +92,9 @@ const CountrySelect = ({
         },
       }}
     >
-      {options?.map(({ label, value: country }) => {
+      {options.map(({ label, value: country }) => {
         return (
-          <MenuItem key={country + label} value={country}>
+          <MenuItem key={country + label} value={country as Value}>
             <ListItemIcon>{Icon({ country })}</ListItemIcon>
             {label}
           </MenuItem>

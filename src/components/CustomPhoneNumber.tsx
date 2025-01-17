@@ -19,10 +19,10 @@ const PhoneInput = forwardRef<HTMLInputElement, phoneInputInt>(
         }}
         inputRef={ref}
         fullWidth
-        size="small"
+        size={props?.size}
         label="Phone Number"
-        variant="outlined"
-        name="phone"
+        variant={props?.variant}
+        name={props?.name}
       />
     );
   }
