@@ -33,10 +33,13 @@ export const MuiPhoneTest: React.FC<MUIPhoneProps> = ({
       value,
       countries: defaultCountries,
       onChange: (data) => {
-        onChange(data.phone);
+        const prefix = "+" + data.country.dialCode;
+        const isOnlyPrefix = data.phone === prefix;
+        const finalValue = isOnlyPrefix ? "" : data.phone;
+
+        onChange(finalValue);
       },
     });
-  console.log(inputValue);
 
   return (
     <TextField
